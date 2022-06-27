@@ -4,4 +4,6 @@ td {
     background-color: aquamarine;
     border-color: black;
     border-style: solid;
+    font-size: 8rem;
+    text-align: center;
 }

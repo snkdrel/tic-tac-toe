@@ -4,15 +4,22 @@ const gameBoard = (() => {
         ['o', 'x', 'o'],
         ['o', 'o', 'x']
     ];
-    return {gameBoardArray};
+    const displayBoard = () => {
+        const table = document.querySelectorAll('td');
+        table.forEach((cell) => {
+            cell.textContent = 'X';
+        });
+    };
+    return {gameBoardArray, displayBoard};
 })();
 
-const playerFactory = () => {
-    // attributes
-    // methods
-    return {};
+const playerFactory = (mark) => {
+    return {mark};
 };
 
-const displayController = (() => {
-    //
+const gameController = (() => {
+    const player1 = playerFactory('X');
+    const player2 = playerFactory('O');
 })();
+
+gameBoard.displayBoard();
