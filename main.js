@@ -26,7 +26,31 @@ const gameBoard = (() => {
 })();
 
 const playerFactory = (mark) => {
-    return {mark};
+    let cellsOccupied = [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+    ];
+    const checkWinCondition = () => {
+        if( cellsOccupied[0][0] && cellsOccupied[0][1] && cellsOccupied[0][2] || 
+            cellsOccupied[1][0] && cellsOccupied[1][1] && cellsOccupied[1][2] ||
+            cellsOccupied[2][0] && cellsOccupied[2][1] && cellsOccupied[2][2] ||
+            cellsOccupied[0][0] && cellsOccupied[1][0] && cellsOccupied[2][0] ||
+            cellsOccupied[0][1] && cellsOccupied[1][1] && cellsOccupied[2][1] ||
+            cellsOccupied[0][2] && cellsOccupied[1][2] && cellsOccupied[2][2] ||
+            cellsOccupied[0][0] && cellsOccupied[1][1] && cellsOccupied[2][2] ||
+            cellsOccupied[0][2] && cellsOccupied[1][1] && cellsOccupied[2][0]){
+                return 0;
+            } else {
+                return 1;
+            }
+    };
+    const occupyCell = (coordinates) => {
+        const x = coordinates.slice(0,1);
+        const y = coordinates.slice(1);
+        cellsOccupied[x][y] = 1;
+    }
+    return {mark, occupyCell, checkWinCondition};
 };
 
 const gameController = (() => {
@@ -38,11 +62,16 @@ const gameController = (() => {
         let currentPlayer;
         if(turnsPassed % 2 == 0){
             currentPlayer = player1;
-        }else{
+        } else {
             currentPlayer = player2;
         }
         if(!gameBoard.newMark(cellClass.slice(1), currentPlayer.mark)){
+            currentPlayer.occupyCell(cellClass.slice(1))
             turnsPassed++;
+            // Check if player won
+            if(!currentPlayer.checkWinCondition()){
+                alert('Player ' + ((turnsPassed-1) % 2 == 0 ? '1':'2') + ' wins!');
+            }
         }
     };
     return{makeTurn};
@@ -51,6 +80,6 @@ const gameController = (() => {
 const cells = document.querySelectorAll('td');
 cells.forEach((c) => {
     c.addEventListener('click', () => {
-        gameController.makeTurn(c.getAttribute('class'));
+        const winner = gameController.makeTurn(c.getAttribute('class'));
     });
 });
