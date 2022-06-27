@@ -14,8 +14,13 @@ const gameBoard = (() => {
     const newMark = (coordinates, mark) => {
         const x = coordinates.slice(0,1);
         const y = coordinates.slice(1);
-        gameBoardArray[x][y] = mark;
-        displayBoard();
+        if(gameBoardArray[x][y] != ''){
+            return 1;
+        }else{
+            gameBoardArray[x][y] = mark;
+            displayBoard();
+            return 0;
+        }
     };
     return {gameBoardArray, newMark};
 })();
@@ -36,9 +41,9 @@ const gameController = (() => {
         }else{
             currentPlayer = player2;
         }
-        gameBoard.newMark(cellClass.slice(1), currentPlayer.mark);
-        
-        turnsPassed++;
+        if(!gameBoard.newMark(cellClass.slice(1), currentPlayer.mark)){
+            turnsPassed++;
+        }
     };
     return{makeTurn};
 })();
